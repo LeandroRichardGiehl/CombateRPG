@@ -1,3 +1,5 @@
+import { Coisa } from "./Coisa";
+
 export class Personagem {
   nome: string;
   vida: number;
@@ -22,33 +24,36 @@ export class Personagem {
     this.level++;
   }
 
-  machucar(dano: number, alvo: Personagem, distancia: number) { 
+  machucar(dano: number, alvo: Coisa, distancia: number) { 
 
-    
     if (this.alcance < distancia){
       console.log(`Erro na distancia`)
-   }else if (this.nome == alvo.getNome()) {
+    } else if(alvo instanceof Personagem){
+      if (this.nome == alvo.getNome()) {
 
-      console.log(`${this.getNome()} não pode atacar a si mesmo.`);
+        console.log(`${this.getNome()} não pode atacar a si mesmo.`);
 
-    } else if(this.level < alvo.level + 5){
-        alvo.vida = alvo.vida - dano * 0.5
-    }else if(this.level > alvo.level + 5){
-        alvo.vida = alvo.vida - dano * 1.5
-    }else{
+      } else if(this.level < alvo.level + 5){
+          alvo.vida = alvo.vida - dano * 0.5
+      }else if(this.level > alvo.level + 5){
+          alvo.vida = alvo.vida - dano * 1.5
+      }else{
         alvo.vida = alvo.vida - dano;
+      }
+    } else {
+      alvo.vida = alvo.vida - dano;
+
     }
 
    
     if (alvo.vida <= 0) {
       alvo.vida = 0;
-      console.log(`${alvo.getNome()} recebeu ${dano} de dano.`);
+      console.log(`${alvo.nome} recebeu ${dano} de dano.`);
       alvo.vivo = false;
-      console.log(`${alvo.getNome()} morreu com seu ataque critico.`);
-    } else {
-      alvo.vivo = true;
+      console.log(`${alvo.nome} morreu com seu ataque critico.`);
     }
   }
+
 
   curar(cura: number, alvo: Personagem) {
     if (alvo.getNome() != this.getNome()) {
